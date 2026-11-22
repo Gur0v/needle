@@ -1,6 +1,6 @@
 {
   "name": "needle",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight Last.fm scrobbler for Firefox",
   "scripts": {
     "test": "vitest run",
