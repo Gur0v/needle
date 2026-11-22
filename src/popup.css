@@ -1,0 +1,47 @@
+:root {
+  color-scheme: light dark;
+  font: message-box;
+  font-size: 13px;
+  --panel: light-dark(#ffffff, #23222b);
+  --text: light-dark(#15141a, #fbfbfe);
+  --muted: light-dark(#5b5b66, #cfcfd8);
+  --border: light-dark(#cfcfd8, #52525e);
+  --button: light-dark(#e0e0e6, #52525e);
+  --accent: light-dark(#0062fa, #00cadb);
+  --accent-text: light-dark(#ffffff, #15141a);
+  background: var(--panel);
+  color: var(--text);
+}
+
+* { box-sizing: border-box; }
+body { width: 320px; margin: 0; }
+main { padding: 16px; }
+h1 { font-size: 15px; font-weight: 600; margin: 0 0 12px; }
+section { border-top: 1px solid var(--border); padding: 12px 0 16px; }
+section p { margin: 0; }
+.label { font-weight: 600; margin-bottom: 6px; }
+#status { line-height: 1.4; }
+#detail { color: var(--muted); line-height: 1.5; margin-top: 4px; overflow-wrap: anywhere; white-space: pre-line; }
+button {
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover { filter: brightness(.92); }
+button.secondary { background: var(--button); color: var(--text); }
+button + button:not([hidden]) { margin-top: 8px; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#error { color: light-dark(#c50042, #ff9aa2); overflow-wrap: anywhere; }
+#error:empty { display: none; }
+[hidden] { display: none; }
+@media (forced-colors: active) {
+  button { border: 1px solid ButtonText; }
+  button:focus-visible { outline-color: Highlight; }
+}
