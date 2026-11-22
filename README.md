@@ -2,53 +2,29 @@
 
 A lightweight Firefox extension that scrobbles YouTube Music to Last.fm.
 
-## Requirements
+## Install
 
-- Firefox 142 or later
-- [Bun](https://bun.sh/) 1.4.5 or later and Node.js 24 for development
-- A Last.fm account and a [Last.fm API application](https://www.last.fm/api/account/create) for local builds
+Download the signed `.xpi` from the latest release and open it in Firefox 142 or later. Connect Last.fm from the Needle popup.
 
-## Setup
+## Build
 
-Install dependencies:
+Requires [Bun](https://bun.sh/docs/installation) 1.4.5, [Node.js](https://nodejs.org/en/download) 24.22.1, and a [Last.fm API application](https://www.last.fm/api/account/create). Version 0.1.1 was built on Linux x86-64.
+
+Add `VITE_LASTFM_API_KEY` and `VITE_LASTFM_API_SECRET` to `.env.local`, then run:
 
 ```sh
 bun install --frozen-lockfile
-```
-
-Create `.env.local` in the project root with your application's credentials:
-
-```dotenv
-VITE_LASTFM_API_KEY=your_api_key
-VITE_LASTFM_API_SECRET=your_api_secret
-```
-
-Build and run in a dedicated Firefox development profile:
-
-```sh
 bun run build
 bun run dev
 ```
 
-Alternatively, open `about:debugging` in your existing Firefox profile, select **This Firefox**, choose **Load Temporary Add-on**, and open `dist/manifest.json`. Temporary add-ons must be loaded again after Firefox closes. Rebuild and reload the add-on after source changes.
-
-In Needle, select **Connect to Last.fm**, approve access, then select **I've approved Needle** in the popup. The dedicated development profile in `.firefox-profile/` retains browser logins and contains private account data.
-
-## Checks
-
-```sh
-bun run test
-bun run build
-bun run web-ext lint --source-dir dist
-```
+Credentials are embedded in the extension. An exact release rebuild requires the original application credentials.
 
 ## Privacy and limitations
 
-Needle reads playback metadata and position on YouTube Music. It stores the Last.fm session key, playback state, and pending scrobbles locally, and sends track metadata and timestamps to Last.fm. Disconnecting removes the session and pending queue; playback records can remain until their browser tabs close.
+Needle reads YouTube Music playback information, stores its Last.fm session and pending scrobbles locally, and sends track details and timestamps to Last.fm. Disconnecting removes the session and queue; playback records can remain until their tabs close.
 
-Last.fm application credentials are included in the built extension and are inspectable. Use dedicated credentials; never commit `.env` files or assume the application secret is private. Users of a distributed build do not need their own API application.
-
-YouTube Music can change its player, and Needle may skip tracks without identifiable metadata or duration. Player metadata can arrive out of sync with track identity. Failed scrobbles are queued, but a lost response after a successful submission can cause a duplicate retry.
+YouTube Music changes may break track detection. Metadata can arrive out of sync with track identity, and retrying after a lost response may duplicate a scrobble.
 
 ## License
 
