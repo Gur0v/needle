@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Needle</title>
+  <link rel="stylesheet" href="/src/popup.css">
+</head>
+<body>
+  <main>
+    <h1>Needle</h1>
+    <section aria-live="polite">
+      <p class="label">Last.fm</p>
+      <p id="status">Loading…</p>
+      <p id="detail"></p>
+    </section>
+    <button id="connect" hidden>Connect to Last.fm</button>
+    <button id="finish" class="secondary" hidden>I've approved Needle</button>
+    <button id="disconnect" class="secondary" hidden>Disconnect</button>
+    <p id="error" role="alert"></p>
+  </main>
+  <script type="module" src="/src/popup.ts"></script>
+</body>
+</html>
