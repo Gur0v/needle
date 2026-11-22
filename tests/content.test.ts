@@ -24,6 +24,7 @@ beforeEach(async () => {
     setInterval: vi.fn(), setTimeout: (callback: () => void) => { queueMicrotask(callback); return 1; },
   });
   vi.stubGlobal('document', {
+    querySelectorAll: (selector: string) => selector.startsWith('ytmusic-player-bar .yt-uix-sessionlink') && playerLink ? [{ href: playerLink }] : [],
     documentElement: {}, addEventListener: (name: string, callback: () => void) => { events[name] = callback; },
     querySelector: (selector: string) => selector === 'video' ? video : selector === 'ytmusic-player-bar, ytmusic-miniplayer' && playerTitle ? { querySelector: (s: string) => s === '.title' ? { textContent: playerTitle } : s === '.byline a, .subtitle a' ? { textContent: playerArtist } : null } : selector.startsWith('ytmusic-player-bar .yt-uix-sessionlink') && playerLink ? { href: playerLink } : null,
   });

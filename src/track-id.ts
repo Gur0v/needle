@@ -1,10 +1,20 @@
 export function trackId(): string | null {
-  const link = document.querySelector<HTMLAnchorElement>('ytmusic-player-bar .yt-uix-sessionlink[href], ytmusic-miniplayer .yt-uix-sessionlink[href], ytmusic-player-bar .title a[href], ytmusic-miniplayer .title a[href]');
-  if (!link) return location.pathname === '/watch' ? new URLSearchParams(location.search).get('v') : null;
-  try {
-    const url = new URL(link.href, location.href);
-    if (!['music.youtube.com', 'www.youtube.com', 'youtube.com', 'youtu.be'].includes(url.hostname)) return null;
-    const id = url.hostname === 'youtu.be' ? url.pathname.slice(1).split('/')[0] : url.searchParams.get('v');
-    return id || (location.pathname === '/watch' ? new URLSearchParams(location.search).get('v') : null);
-  } catch { return null; }
+  const selectors = 'ytmusic-player-bar .yt-uix-sessionlink[href], ytmusic-miniplayer .yt-uix-sessionlink[href], ytmusic-player-bar .title a[href], ytmusic-miniplayer .title a[href], ytmusic-player-bar a.title[href], ytmusic-miniplayer a.title[href]';
+  function ids(selector: string): string[] {
+    return Array.from(document.querySelectorAll<HTMLAnchorElement>(selector), link => {
+      try {
+        const url = new URL(link.href, location.href);
+        if (!['http:', 'https:'].includes(url.protocol)) return null;
+        if (url.hostname === 'youtu.be') return url.pathname.split('/').filter(Boolean).length === 1 ? url.pathname.slice(1) : null;
+        if (!['music.youtube.com', 'www.youtube.com', 'youtube.com'].includes(url.hostname) || url.pathname !== '/watch') return null;
+        return url.searchParams.get('v');
+      } catch { return null; }
+    }).filter((id): id is string => Boolean(id));
+  }
+  const player = ids(selectors)[0];
+  if (player) return player;
+  if (location.pathname === '/watch') return new URLSearchParams(location.search).get('v');
+  // shortcut: a unique global link may not identify the player, upgrade when player identity is exposed reliably.
+  const global = new Set(ids('.yt-uix-sessionlink[href]'));
+  return global.size === 1 ? [...global][0] : null;
 }
