@@ -59,6 +59,13 @@ test('prefers the player identity over a browsed watch URL', async () => {
   expect((snapshots.at(-1) as { track: { id: string } }).track.id).toBe('playing');
 });
 
+test('uses the watch URL when the player link has no video ID', async () => {
+  playerLink = 'https://music.youtube.com/browse/channel';
+  deliver({ source: 'needle-media-session', id: 'old', title: 'Song', artist: 'Artist', album: '' });
+  await Promise.resolve();
+  expect((snapshots.at(-1) as { track: { id: string } }).track.id).toBe('old');
+});
+
 test('rejects null identity and off-site player links', async () => {
   search = '';
   playerLink = 'https://evil.example/watch?v=playing';

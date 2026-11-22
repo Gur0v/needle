@@ -4,6 +4,7 @@ export function trackId(): string | null {
   try {
     const url = new URL(link.href, location.href);
     if (!['music.youtube.com', 'www.youtube.com', 'youtube.com', 'youtu.be'].includes(url.hostname)) return null;
-    return url.hostname === 'youtu.be' ? url.pathname.slice(1).split('/')[0] || null : url.searchParams.get('v');
+    const id = url.hostname === 'youtu.be' ? url.pathname.slice(1).split('/')[0] : url.searchParams.get('v');
+    return id || (location.pathname === '/watch' ? new URLSearchParams(location.search).get('v') : null);
   } catch { return null; }
 }
